@@ -1,0 +1,241 @@
+import sys
+import math
+import string
+
+a1 = []
+a2 = []
+a3 = []
+a4 = []
+r = []
+gamma = 0.9925
+
+# Importing the values of the probability for each s and s, west'
+f = open('C:/Users/ragha/OneDrive/Documents/Workspace/CSE150/prob_a1.txt','r')
+for line in f:
+	a1_vals = line.rstrip('\n').split('   ')
+	a1_vals.remove('')
+	a1_vals[0] = int(a1_vals[0])
+	a1_vals[1] = int(a1_vals[1])
+	a1_vals[2] = float(a1_vals[2])
+	a1.append(a1_vals)
+f.close()
+#print a1
+
+# Importing the values of the probability for each s and s, north'
+f = open('C:/Users/ragha/OneDrive/Documents/Workspace/CSE150/prob_a2.txt','r')
+for line in f:
+	a2_vals = line.rstrip('\n').split('   ')
+	a2_vals.remove('')
+	a2_vals[0] = int(a2_vals[0])
+	a2_vals[1] = int(a2_vals[1])
+	a2_vals[2] = float(a2_vals[2])
+	a2.append(a2_vals)
+f.close()
+
+
+# Importing the values of the probability for each s and s for east'
+f = open('C:/Users/ragha/OneDrive/Documents/Workspace/CSE150/prob_a3.txt','r')
+for line in f:
+	a3_vals = line.rstrip('\n').split('   ')
+	a3_vals.remove('')
+	a3_vals[0] = int(a3_vals[0])
+	a3_vals[1] = int(a3_vals[1])
+	a3_vals[2] = float(a3_vals[2])
+	a3.append(a3_vals)
+f.close()
+
+# Importing the values of the probability for each s and s for south'
+f = open('C:/Users/ragha/OneDrive/Documents/Workspace/CSE150/prob_a4.txt','r')
+for line in f:
+	a4_vals = line.rstrip('\n').split('   ')
+	a4_vals.remove('')
+	a4_vals[0] = int(a4_vals[0])
+	a4_vals[1] = int(a4_vals[1])
+	a4_vals[2] = float(a4_vals[2])
+	a4.append(a4_vals)
+f.close()
+
+
+# Importing the values of the rewards for each s 
+f = open('C:/Users/ragha/OneDrive/Documents/Workspace/CSE150/rewards.txt','r')
+for line in f:
+	r_vals = line.rstrip('\n')
+	r_vals = float(int(r_vals))
+	r.append(r_vals)
+f.close()
+
+q_val = [0.0 for j in range(4)]
+v_vals = [q_val for k in range(81)]
+v_best = [0.0 for k in range(81)]
+for test in range(1000):
+	for s in range(1,82):
+		r_val = r[s-1]
+		q_val = [j for j in range(4)]
+		for a in range(4):
+			a_vals = []
+			#print a
+			if a==0:
+				a_vals = a1
+			if a==1:
+				a_vals = a2
+			if a==2:
+				a_vals = a3
+			if a==3:
+				a_vals = a4
+			sum_pv = 0.0
+			for a_val in a_vals:
+				if(a_val[0]==s):
+					s_p = a_val[1]
+					v_sp = v_best[s_p-1]
+					p_sp = a_val[2]
+					sum_pv += v_sp*p_sp
+			q_val[a] = sum_pv
+		v_vals[s-1] = q_val
+		v_best[s-1] = r_val + gamma*(max(q_val))
+
+for i,v in enumerate(v_best):
+	if (v!=0):
+		print str(v) + " @indexof " + str(i+1)
+
+for i,v in enumerate(v_vals):
+	if (max(v_vals[i])==v_vals[i][0]):
+		print "west "+ str(i+1)
+	elif (max(v_vals[i])==v_vals[i][1]):
+		print "north "+ str(i+1)
+	elif (max(v_vals[i])==v_vals[i][2]):
+		print "east "+ str(i+1)
+	else:
+		print "south "+ str(i+1)
+
+'''VALUES 
+74.6200767027 @indexof 5
+90.3631547446 @indexof 11
+77.2290020718 @indexof 12
+76.1110794827 @indexof 13
+75.2838574234 @indexof 14
+73.2634356527 @indexof 15
+61.5381405674 @indexof 16
+66.3084081236 @indexof 17
+91.9395661877 @indexof 20
+-133.261644061 @indexof 21
+69.4375255046 @indexof 22
+61.7149981316 @indexof 24
+-133.261644061 @indexof 25
+67.1788331915 @indexof 26
+106.097235776 @indexof 29
+95.664160345 @indexof 30
+81.586126395 @indexof 31
+-133.261644061 @indexof 32
+69.6954401937 @indexof 33
+79.6182422559 @indexof 35
+108.487489713 @indexof 38
+110.195753828 @indexof 39
+-133.261644061 @indexof 41
+82.7235044205 @indexof 42
+81.0581783067 @indexof 44
+98.2421421647 @indexof 47
+112.131199473 @indexof 48
+109.652587652 @indexof 49
+84.0896400712 @indexof 50
+96.9307248058 @indexof 51
+95.2935015432 @indexof 52
+81.8638885424 @indexof 53
+-133.261644061 @indexof 56
+114.20522371 @indexof 57
+-133.261644061 @indexof 59
+99.4802787033 @indexof 60
+-133.261644061 @indexof 62
+129.899969437 @indexof 66
+130.09264215 @indexof 67
+117.932577626 @indexof 68
+114.205846981 @indexof 69
+-133.261644061 @indexof 70
+133.261644061 @indexof 74
+131.967294002 @indexof 75
+131.976425036 @indexof 76
+133.261644061 @indexof 77
+130.425561343 @indexof 78
+118.144556434 @indexof 79
+133.261644061 @indexof 80
+west 1
+west 2
+west 3
+west 4
+east 5
+west 6
+west 7
+west 8
+west 9
+west 10
+east 11
+north 12
+north 13
+north 14
+north 15
+north 16
+east 17
+west 18
+west 19
+east 20
+west 21
+east 22
+west 23
+west 24
+west 25
+east 26
+west 27
+west 28
+east 29
+east 30
+north 31
+west 32
+east 33
+west 34
+east 35
+west 36
+west 37
+south 38
+east 39
+west 40
+west 41
+east 42
+west 43
+east 44
+west 45
+west 46
+south 47
+east 48
+north 49
+north 50
+east 51
+north 52
+north 53
+west 54
+west 55
+west 56
+east 57
+west 58
+west 59
+east 60
+west 61
+west 62
+west 63
+west 64
+west 65
+east 66
+east 67
+east 68
+east 69
+west 70
+west 71
+west 72
+west 73
+west 74
+north 75
+south 76
+west 77
+north 78
+south 79
+west 80
+west 81
+[Finished in 106.7s]'''
