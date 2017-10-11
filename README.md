@@ -2,6 +2,6 @@
 
 ## Projects
 
-### Viterbi
-### HMM
-### E-M Algorithm
+### HMM-Viterbi
+### N-Gram
+### EM Algorithm
